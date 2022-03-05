@@ -22,7 +22,7 @@ NfoData readNfoFile(const std::filesystem::path &filePath) {
     return data;
 }
 
-void walkDirectory(const std::string &rootDirectory, PluginByVendorMap &pluginMap) {
+void walkDirectory(const std::filesystem::path &rootDirectory, PluginByVendorMap &pluginMap) {
     for (const auto &entry: std::filesystem::recursive_directory_iterator(rootDirectory)) {
         if (entry.is_regular_file()
             && entry.path().extension() == ".nfo"
@@ -49,11 +49,11 @@ void walkDirectory(const std::string &rootDirectory, PluginByVendorMap &pluginMa
     }
 }
 
-PluginByVendorMap walkDirectories(const std::string &pluginDbPath) {
+PluginByVendorMap walkDirectories(const std::filesystem::path &pluginDbPath) {
     PluginByVendorMap pluginMap;
     walkDirectory(pluginDbPath, pluginMap);
-    for (const auto &entry : pluginMap) {
-        std::cout << entry.first << ": " << entry.second << std::endl;
-    }
+//    for (const auto &entry : pluginMap) {
+//        std::cout << entry.first << ": " << entry.second << std::endl;
+//    }
     return pluginMap;
 }

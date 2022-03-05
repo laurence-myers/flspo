@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "read.h"
+#include "write.h"
 
 enum class ExitCode : uint8_t {
     Okay,
@@ -10,8 +11,8 @@ enum class ExitCode : uint8_t {
     InvalidDirectory
 };
 
-int main(int argc, char* argv[]) {
-    std::string pluginDbPath;
+int main(const int argc, const char* argv[]) {
+    std::filesystem::path pluginDbPath;
 
     if (argc >= 2) {
         pluginDbPath = argv[1];
@@ -34,16 +35,19 @@ int main(int argc, char* argv[]) {
         return static_cast<int>(ExitCode::InvalidDirectory);
     }
 
-    pluginDbPath += "\\Installed";
+    std::filesystem::path installedPluginDbPath = pluginDbPath / "Installed";
 
-    if (!std::filesystem::exists(pluginDbPath)) {
-        std::cerr << "Directory does not exist: " << pluginDbPath << std::endl;
+    if (!std::filesystem::exists(installedPluginDbPath)) {
+        std::cerr << "Directory does not exist: " << installedPluginDbPath << std::endl;
         return static_cast<int>(ExitCode::InvalidDirectory);
     }
-    if (!std::filesystem::is_directory(pluginDbPath)) {
-        std::cerr << "Given path is not a directory: " << pluginDbPath << std::endl;
+    if (!std::filesystem::is_directory(installedPluginDbPath)) {
+        std::cerr << "Given path is not a directory: " << installedPluginDbPath << std::endl;
         return static_cast<int>(ExitCode::InvalidDirectory);
     }
 
-    PluginByVendorMap pluginMap = walkDirectories(pluginDbPath);
+    PluginByVendorMap pluginMap = walkDirectories(installedPluginDbPath);
+    writeToPluginDatabase(pluginDbPath, pluginMap);
+
+    return static_cast<int>(ExitCode::Okay);
 }
