@@ -3,4 +3,4 @@ project(fl_studio_plugin_organizer)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(fl_studio_plugin_organizer main.cpp files.cpp files.h)
+add_executable(fl_studio_plugin_organizer main.cpp read.cpp read.h common.h)

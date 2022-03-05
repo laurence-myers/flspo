@@ -1,24 +1,8 @@
-#pragma once
-
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <map>
-
-struct PluginData {
-    const std::string name;
-    const std::filesystem::path path;
-    const std::string category;
-    const std::string type;
-
-    friend std::ostream &operator<<(std::ostream &os, const PluginData &data) {
-        os << "name: " << data.name << " path: " << data.path << " category: " << data.category << " type: "
-           << data.type;
-        return os;
-    }
-};
-
-typedef std::multimap<std::string, PluginData> PluginByVendorMap;
+#include "common.h"
 
 typedef std::map<std::string, std::string> NfoData;
 
