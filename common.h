@@ -5,15 +5,20 @@
 #include <map>
 #include <string>
 
+enum PluginType {
+    Effect = 1,
+    Generator = 2
+};
+
 struct PluginData {
     const std::string name;
     const std::filesystem::path path;
-    const std::string category;
-    const std::string type;
+    const PluginType pluginType;
+    const std::string summary;
 
     friend std::ostream &operator<<(std::ostream &os, const PluginData &data) {
-        os << "name: " << data.name << " path: " << data.path << " category: " << data.category << " type: "
-           << data.type;
+        os << "name: " << data.name << " path: " << data.path << " pluginType: " << data.pluginType << " summary: "
+           << data.summary;
         return os;
     }
 };

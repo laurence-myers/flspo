@@ -8,7 +8,8 @@
 enum class ExitCode : uint8_t {
     Okay,
     MissingArg,
-    InvalidDirectory
+    InvalidDirectory,
+    UnhandledError
 };
 
 int main(const int argc, const char* argv[]) {
@@ -46,8 +47,13 @@ int main(const int argc, const char* argv[]) {
         return static_cast<int>(ExitCode::InvalidDirectory);
     }
 
-    PluginByVendorMap pluginMap = walkDirectories(installedPluginDbPath);
-    writeToPluginDatabase(pluginDbPath, pluginMap);
+    try {
+        PluginByVendorMap pluginMap = walkDirectories(installedPluginDbPath);
+        writeToPluginDatabase(pluginDbPath, pluginMap);
+    } catch (std::exception &err) {
+        std::cerr << err.what();
+        return static_cast<int>(ExitCode::UnhandledError);
+    }
 
     return static_cast<int>(ExitCode::Okay);
 }

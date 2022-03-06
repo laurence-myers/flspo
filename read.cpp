@@ -1,8 +1,8 @@
 #include <filesystem>
 #include <fstream>
-#include <iostream>
 #include <map>
 #include "common.h"
+#include "error.h"
 
 typedef std::map<std::string, std::string> NfoData;
 
@@ -32,15 +32,22 @@ void walkDirectory(const std::filesystem::path &rootDirectory, PluginByVendorMap
 //            std::cout << entry.path() << std::endl;
             // Read file as map of values.
             NfoData nfoData { readNfoFile(entry.path()) };
-            // Check if we've seen this plugin before.
-            // If not, store its details (vendor, name, type)
-            std::string vendor = nfoData["ps_file_vendorname_0"];
-            std::string tip = nfoData["tip"];
+
+            // Extract the plugin details.
+            const std::string vendor { nfoData["ps_file_vendorname_0"] };
+
             if (!vendor.empty()) {
+                std::string tip { nfoData["tip"] };
+
+                const int pluginType { std::stoi(nfoData["ps_file_type_0"]) };
+                if (pluginType < PluginType::Effect || pluginType > PluginType::Generator) {
+                    throw UnexpectedValueError();
+                }
+
                 PluginData pluginData {
                     nfoData["ps_name"],
                     entry.path(),
-                    nfoData["ps_file_category_0"], // Might also want to look at "ps_file_category_1", which sometimes has "Instrument|Synth"
+                    static_cast<PluginType>(pluginType),
                     tip.replace(tip.find('/'), 1, "-") // make this filename safe
                 };
                 pluginMap.emplace(vendor, pluginData);
