@@ -48,8 +48,10 @@ void walkDirectory(const std::filesystem::path &rootDirectory, PluginByVendorMap
             const std::string vendor { nfoData["ps_file_vendorname_0"] };
 
             if (!vendor.empty()) {
+                const auto rawPluginType { nfoData["ps_file_type_0"] };
                 const int pluginType { std::stoi(nfoData["ps_file_type_0"]) };
                 if (pluginType < PluginType::Effect || pluginType > PluginType::Generator) {
+                    std::cerr << "Unrecognised plugin type: " << rawPluginType;
                     throw UnexpectedValueError();
                 }
 
