@@ -1,6 +1,7 @@
-#include <filesystem>
 #include <fstream>
+#include <iostream>
 #include <map>
+#include "read.h"
 #include "common.h"
 #include "error.h"
 
@@ -13,8 +14,14 @@ NfoData readNfoFile(const std::filesystem::path &filePath) {
         std::string key;
         std::string value;
         while (std::getline(file, key, '=')) {
+#if _DEBUG
+            std::cout << "Key: " << key << std::endl;
+#endif
             // split string into key & value
             std::getline(file, value);
+#if _DEBUG
+            std::cout << "Value: " << value << std::endl;
+#endif
             // Store in NfoData
             data[key] = value;
         }
@@ -24,12 +31,14 @@ NfoData readNfoFile(const std::filesystem::path &filePath) {
 
 void walkDirectory(const std::filesystem::path &rootDirectory, PluginByVendorMap &pluginMap) {
     for (const auto &entry: std::filesystem::recursive_directory_iterator(rootDirectory)) {
+#if _DEBUG
+        std::cout << entry.path() << std::endl;
+#endif
         if (entry.is_regular_file()
             && entry.path().extension() == ".nfo"
             && entry.path().filename() != "VerifiedIDs.nfo" // Some FL Studio thing, not a plugin.
             && !entry.path().parent_path().string().ends_with("New") // ignore the "New" dir, duplicates other dirs
         ) {
-//            std::cout << entry.path() << std::endl;
             // Read file as map of values.
             NfoData nfoData { readNfoFile(entry.path()) };
 
@@ -50,6 +59,9 @@ void walkDirectory(const std::filesystem::path &rootDirectory, PluginByVendorMap
                     static_cast<PluginType>(pluginType),
                     tip.replace(tip.find('/'), 1, "-") // make this filename safe
                 };
+#if _DEBUG
+                std::cout << pluginData << std::endl;
+#endif
                 pluginMap.emplace(vendor, pluginData);
             }
         }
