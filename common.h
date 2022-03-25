@@ -14,11 +14,9 @@ struct PluginData {
     const std::string name;
     const std::filesystem::path path;
     const PluginType pluginType;
-    const std::string summary;
 
     friend std::ostream &operator<<(std::ostream &os, const PluginData &data) {
-        os << "name: " << data.name << " path: " << data.path << " pluginType: " << data.pluginType << " summary: "
-           << data.summary;
+        os << "name: " << data.name << " path: " << data.path << " pluginType: " << data.pluginType;
         return os;
     }
 };

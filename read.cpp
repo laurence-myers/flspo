@@ -2,15 +2,12 @@
 #include <fstream>
 #include <iostream>
 #include <map>
-#include <regex>
 
 #include "read.h"
 #include "common.h"
 #include "error.h"
 
 typedef std::map<std::string, std::string> NfoData;
-
-const std::regex SAFE_FILE_NAME_PATTERN { "/" };
 
 NfoData readNfoFile(const std::filesystem::path &filePath) {
     std::ifstream file { filePath };
@@ -51,8 +48,6 @@ void walkDirectory(const std::filesystem::path &rootDirectory, PluginByVendorMap
             const std::string vendor { nfoData["ps_file_vendorname_0"] };
 
             if (!vendor.empty()) {
-                std::string tip { nfoData["tip"] };
-
                 const int pluginType { std::stoi(nfoData["ps_file_type_0"]) };
                 if (pluginType < PluginType::Effect || pluginType > PluginType::Generator) {
                     throw UnexpectedValueError();
@@ -61,8 +56,7 @@ void walkDirectory(const std::filesystem::path &rootDirectory, PluginByVendorMap
                 PluginData pluginData {
                     nfoData["ps_name"],
                     entry.path(),
-                    static_cast<PluginType>(pluginType),
-                    std::regex_replace(tip, SAFE_FILE_NAME_PATTERN, "-") // make this filename safe
+                    static_cast<PluginType>(pluginType)
                 };
 #if _DEBUG
                 std::cout << pluginData << std::endl;
