@@ -16,12 +16,12 @@ NfoData readNfoFile(const std::filesystem::path &filePath) {
         std::string key;
         std::string value;
         while (std::getline(file, key, '=')) {
-#if _DEBUG
+#if FLSPO_VERBOSE
             std::cout << "Key: " << key << std::endl;
 #endif
             // split string into key & value
             std::getline(file, value);
-#if _DEBUG
+#if FLSPO_VERBOSE
             std::cout << "Value: " << value << std::endl;
 #endif
             // Store in NfoData
@@ -33,7 +33,7 @@ NfoData readNfoFile(const std::filesystem::path &filePath) {
 
 void walkDirectory(const std::filesystem::path &rootDirectory, PluginByVendorMap &pluginMap) {
     for (const auto &entry: std::filesystem::recursive_directory_iterator(rootDirectory)) {
-#if _DEBUG
+#if FLSPO_VERBOSE
         std::cout << entry.path() << std::endl;
 #endif
         if (entry.is_regular_file()
@@ -60,7 +60,7 @@ void walkDirectory(const std::filesystem::path &rootDirectory, PluginByVendorMap
                     entry.path(),
                     static_cast<PluginType>(pluginType)
                 };
-#if _DEBUG
+#if FLSPO_VERBOSE
                 std::cout << pluginData << std::endl;
 #endif
                 pluginMap.emplace(vendor, pluginData);

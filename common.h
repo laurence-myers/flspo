@@ -5,6 +5,8 @@
 #include <map>
 #include <string>
 
+#define FLSPO_VERBOSE 1
+
 enum PluginType {
     Effect = 1,
     Generator = 2
