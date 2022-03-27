@@ -1,6 +1,10 @@
 #include <filesystem>
-#include <fstream>
-#include <iostream>
+#include <windows.h>
+
+#include <nowide/args.hpp>
+#include <nowide/cstdlib.hpp>
+#include <nowide/iostream.hpp>
+#include <nowide/convert.hpp>
 
 #include "read.h"
 #include "write.h"
@@ -12,15 +16,19 @@ enum class ExitCode : uint8_t {
     UnhandledError
 };
 
-int main(const int argc, const char* argv[]) {
+int main(int argc, char* argv[]) {
+    nowide::args args ( argc, argv );
+
+    SetConsoleCP(65001); // UTF-8 on Windows
+
     std::filesystem::path pluginDbPath;
 
     if (argc >= 2) {
-        pluginDbPath = argv[1];
+        pluginDbPath = nowide::widen(argv[1]);
     } else {
-        std::string homeDir = getenv("UserProfile");
+        std::string homeDir { nowide::getenv("UserProfile") };
         if (homeDir.empty()) {
-            std::cerr << "Please pass the path to your plugin database as the first arg.";
+            nowide::cerr << "Please pass the path to your plugin database as the first arg.";
             return static_cast<int>(ExitCode::MissingArg);
         }
         // Assumes we're on Windows
@@ -28,22 +36,22 @@ int main(const int argc, const char* argv[]) {
     }
 
     if (!std::filesystem::exists(pluginDbPath)) {
-        std::cerr << "Directory does not exist: " << pluginDbPath << std::endl;
+        nowide::cerr << "Directory does not exist: " << pluginDbPath.string() << std::endl;
         return static_cast<int>(ExitCode::InvalidDirectory);
     }
     if (!std::filesystem::is_directory(pluginDbPath)) {
-        std::cerr << "Given path is not a directory: " << pluginDbPath << std::endl;
+        nowide::cerr << "Given path is not a directory: " << pluginDbPath.string() << std::endl;
         return static_cast<int>(ExitCode::InvalidDirectory);
     }
 
     std::filesystem::path installedPluginDbPath = pluginDbPath / "Installed";
 
     if (!std::filesystem::exists(installedPluginDbPath)) {
-        std::cerr << "Directory does not exist: " << installedPluginDbPath << std::endl;
+        nowide::cerr << "Directory does not exist: " << installedPluginDbPath.string() << std::endl;
         return static_cast<int>(ExitCode::InvalidDirectory);
     }
     if (!std::filesystem::is_directory(installedPluginDbPath)) {
-        std::cerr << "Given path is not a directory: " << installedPluginDbPath << std::endl;
+        nowide::cerr << "Given path is not a directory: " << installedPluginDbPath.string() << std::endl;
         return static_cast<int>(ExitCode::InvalidDirectory);
     }
 
@@ -51,7 +59,7 @@ int main(const int argc, const char* argv[]) {
         PluginByVendorMap pluginMap = walkDirectories(installedPluginDbPath);
         writeToPluginDatabase(pluginDbPath, pluginMap);
     } catch (std::exception &err) {
-        std::cerr << err.what();
+        nowide::cerr << err.what();
         return static_cast<int>(ExitCode::UnhandledError);
     }
 

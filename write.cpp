@@ -1,4 +1,5 @@
-#include <iostream>
+#include <nowide/iostream.hpp>
+
 #include "write.h"
 
 void writeToPluginDatabase(const std::filesystem::path &pluginDbPath, const PluginByVendorMap &pluginByVendorMap) {
@@ -6,7 +7,7 @@ void writeToPluginDatabase(const std::filesystem::path &pluginDbPath, const Plug
     const std::filesystem::path generatorsOutputPath = pluginDbPath / "Generators" / "By Vendor";
 
     for (const auto &entry : pluginByVendorMap) {
-        std::cout << entry.first << " - " << entry.second.name << std::endl;
+        nowide::cout << entry.first << " - " << entry.second.name << std::endl;
         const std::filesystem::path vendorOutputPath = (entry.second.pluginType == PluginType::Effect ? effectsOutputPath : generatorsOutputPath) / entry.first;
         create_directories(vendorOutputPath);
 

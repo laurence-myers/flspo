@@ -5,6 +5,8 @@
 #include <map>
 #include <string>
 
+#include <nowide/convert.hpp>
+
 #define FLSPO_VERBOSE 1
 
 enum PluginType {
@@ -18,11 +20,13 @@ struct PluginData {
     const PluginType pluginType;
 
     friend std::ostream &operator<<(std::ostream &os, const PluginData &data) {
-        os << "name: " << data.name << " path: " << data.path << " pluginType: " << data.pluginType;
+        os << "name: " << data.name << " path: " << nowide::narrow(data.path.wstring()) << " pluginType: " << data.pluginType;
         return os;
     }
 };
 
 typedef std::multimap<std::string, PluginData> PluginByVendorMap;
+
+//typedef std::basic_string<char8_t> Utf8String; // std::u8string isn't recognised by CLion :(
 
 #endif //FL_STUDIO_PLUGIN_ORGANIZER_COMMON_H

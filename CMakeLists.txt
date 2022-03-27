@@ -42,13 +42,13 @@ include(${CPM_DOWNLOAD_LOCATION})
 ##############
 # Dependencies
 
-#CPMAddPackage(
-#        NAME xxx          # The unique name of the dependency (should be the exported target's name)
-#        VERSION x.x.x       # The minimum version of the dependency (optional, defaults to 0)
-#        #    OPTIONS       # Configuration options passed to the dependency (optional)
-#        #    DOWNLOAD_ONLY # If set, the project is downloaded, but not configured (optional)
-#        URL "xxx"         # Origin parameters forwarded to FetchContent_Declare
-#)
+CPMAddPackage(
+        NAME nowide          # The unique name of the dependency (should be the exported target's name)
+        VERSION 11.1.4       # The minimum version of the dependency (optional, defaults to 0)
+        #    OPTIONS       # Configuration options passed to the dependency (optional)
+        #    DOWNLOAD_ONLY # If set, the project is downloaded, but not configured (optional)
+        URL "https://github.com/boostorg/nowide/releases/download/v11.1.4/nowide_standalone_v11.1.4.tar.gz"         # Origin parameters forwarded to FetchContent_Declare
+)
 
 ##############
 # App settings
@@ -57,3 +57,4 @@ add_executable(flspo main.cpp read.cpp read.h common.h write.cpp write.h error.h
 
 ###################
 # Link dependencies
+target_link_libraries(flspo nowide)

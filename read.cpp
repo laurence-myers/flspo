@@ -1,7 +1,9 @@
 #include <filesystem>
-#include <fstream>
-#include <iostream>
 #include <map>
+
+#include <nowide/convert.hpp>
+#include <nowide/fstream.hpp>
+#include <nowide/iostream.hpp>
 
 #include "read.h"
 #include "common.h"
@@ -10,19 +12,19 @@
 typedef std::map<std::string, std::string> NfoData;
 
 NfoData readNfoFile(const std::filesystem::path &filePath) {
-    std::ifstream file { filePath };
+    nowide::ifstream file = nowide::ifstream ( filePath.string() );
     NfoData data;
     if (file.is_open()) {
         std::string key;
         std::string value;
         while (std::getline(file, key, '=')) {
 #if FLSPO_VERBOSE
-            std::cout << "Key: " << key << std::endl;
+            nowide::cout << "Key: " << key << std::endl;
 #endif
             // split string into key & value
             std::getline(file, value);
 #if FLSPO_VERBOSE
-            std::cout << "Value: " << value << std::endl;
+            nowide::cout << "Value: " << value << std::endl;
 #endif
             // Store in NfoData
             data[key] = value;
@@ -33,16 +35,18 @@ NfoData readNfoFile(const std::filesystem::path &filePath) {
 
 void walkDirectory(const std::filesystem::path &rootDirectory, PluginByVendorMap &pluginMap) {
     for (const auto &entry: std::filesystem::recursive_directory_iterator(rootDirectory)) {
+        const auto path { entry.path() };
 #if FLSPO_VERBOSE
-        std::cout << entry.path() << std::endl;
+        nowide::cout << (nowide::narrow(path.wstring())) << std::endl;
 #endif
         if (entry.is_regular_file()
-            && entry.path().extension() == ".nfo"
-            && entry.path().filename() != "VerifiedIDs.nfo" // Some FL Studio thing, not a plugin.
-            && !entry.path().parent_path().string().ends_with("New") // ignore the "New" dir, duplicates other dirs
+            && path.extension() == ".nfo"
+            && path.filename() != "VerifiedIDs.nfo" // Some FL Studio thing, not a plugin.
+            && !path.parent_path().string().ends_with("New") // ignore the "New" dir, duplicates other dirs
         ) {
             // Read file as map of values.
-            NfoData nfoData { readNfoFile(entry.path()) };
+
+            NfoData nfoData { readNfoFile(path) };
 
             // Extract the plugin details.
             const std::string vendor { nfoData["ps_file_vendorname_0"] };
@@ -51,7 +55,7 @@ void walkDirectory(const std::filesystem::path &rootDirectory, PluginByVendorMap
                 const auto rawPluginType { nfoData["ps_file_type_0"] };
                 const int pluginType { std::stoi(nfoData["ps_file_type_0"]) };
                 if (pluginType < PluginType::Effect || pluginType > PluginType::Generator) {
-                    std::cerr << "Unrecognised plugin type: " << rawPluginType;
+                    nowide::cerr << "Unrecognised plugin type: " << rawPluginType;
                     throw UnexpectedValueError();
                 }
 
@@ -61,7 +65,7 @@ void walkDirectory(const std::filesystem::path &rootDirectory, PluginByVendorMap
                     static_cast<PluginType>(pluginType)
                 };
 #if FLSPO_VERBOSE
-                std::cout << pluginData << std::endl;
+                nowide::cout << pluginData << std::endl;
 #endif
                 pluginMap.emplace(vendor, pluginData);
             }
