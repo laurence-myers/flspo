@@ -13,7 +13,9 @@ Reads your installed plugins, and adds new directories in your Plugin Database, 
   - On Windows, the FL Studio Plugin Database is assumed to be located at "${UserProfile}\Documents\Image-Line\FL Studio\Presets\Plugin database".
   - If your plugin database is located somewhere else, pass its directory as an argument, e.g. `flspo.exe D:\Audio\FL\PluginDB`
 
-The next time you add
+In FL Studio, when you go to add a new Generator or Effect, the dropdown menu will have a new folder named "By Vendor".
+
+If you install a new plugin, add it to FL Studio by doing a "quick scan", then re-run FLSPO. 
 
 _(This only makes sense when you use the "Tree" or "Categories" views. The "Simple" view will not look any different.)_
 
