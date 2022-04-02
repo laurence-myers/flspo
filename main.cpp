@@ -1,5 +1,7 @@
 #include <filesystem>
+#ifdef WIN32
 #include <windows.h>
+#endif
 
 #include <nowide/args.hpp>
 #include <nowide/cstdlib.hpp>
@@ -19,7 +21,9 @@ enum class ExitCode : uint8_t {
 int main(int argc, char* argv[]) {
     nowide::args args ( argc, argv );
 
+#ifdef WIN32
     SetConsoleCP(65001); // UTF-8 on Windows
+#endif
 
     std::filesystem::path pluginDbPath;
 

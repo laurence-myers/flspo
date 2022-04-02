@@ -7,7 +7,7 @@
 
 #include <nowide/convert.hpp>
 
-#define FLSPO_VERBOSE 1
+#define FLSPO_VERBOSE 0
 
 enum PluginType {
     Effect = 1,
@@ -26,7 +26,5 @@ struct PluginData {
 };
 
 typedef std::multimap<std::string, PluginData> PluginByVendorMap;
-
-//typedef std::basic_string<char8_t> Utf8String; // std::u8string isn't recognised by CLion :(
 
 #endif //FL_STUDIO_PLUGIN_ORGANIZER_COMMON_H

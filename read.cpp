@@ -12,7 +12,9 @@
 typedef std::map<std::string, std::string> NfoData;
 
 NfoData readNfoFile(const std::filesystem::path &filePath) {
-    nowide::ifstream file = nowide::ifstream ( filePath.string() );
+    const std::string path { nowide::narrow(filePath.wstring()) }; // not quite right, but using `filePath` or `filePath.8string()` directly causes issues.
+    nowide::cout << "Reading file: " << path << std::endl;
+    nowide::ifstream file = nowide::ifstream ( path );
     NfoData data;
     if (file.is_open()) {
         std::string key;
@@ -42,10 +44,9 @@ void walkDirectory(const std::filesystem::path &rootDirectory, PluginByVendorMap
         if (entry.is_regular_file()
             && path.extension() == ".nfo"
             && path.filename() != "VerifiedIDs.nfo" // Some FL Studio thing, not a plugin.
-            && !path.parent_path().string().ends_with("New") // ignore the "New" dir, duplicates other dirs
+            && !path.parent_path().u8string().ends_with(u8"New") // ignore the "New" dir, duplicates other dirs
         ) {
             // Read file as map of values.
-
             NfoData nfoData { readNfoFile(path) };
 
             // Extract the plugin details.
