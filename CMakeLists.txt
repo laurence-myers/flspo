@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.21)
-project(fl_studio_plugin_organizer)
+project(fl_studio_plugin_organizer VERSION 1.1.0)
 
 set(CMAKE_CXX_STANDARD 20)
 
