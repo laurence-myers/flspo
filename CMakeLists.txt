@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.21)
-project(fl_studio_plugin_organizer VERSION 1.1.0)
+project(fl_studio_plugin_organizer
+        VERSION 1.1.0
+        DESCRIPTION "FL Studio Plugin Organizer"
+        HOMEPAGE_URL "https://github.com/laurence-myers/flspo"
+        LANGUAGES CXX
+        )
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -58,3 +63,30 @@ add_executable(flspo main.cpp read.cpp read.h common.h write.cpp write.h error.h
 ###################
 # Link dependencies
 target_link_libraries(flspo nowide)
+
+################
+# Package as zip
+
+set(CPACK_RESOURCE_FILE_COPYING "${CMAKE_SOURCE_DIR}/COPYING")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
+set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README.md")
+install(
+        FILES
+        ${CPACK_RESOURCE_FILE_COPYING}
+        ${CPACK_RESOURCE_FILE_LICENSE}
+        ${CPACK_RESOURCE_FILE_README}
+        DESTINATION
+        .
+)
+install(
+        TARGETS
+        flspo
+        RUNTIME
+        DESTINATION
+        .
+)
+set(CPACK_BINARY_NSIS "OFF")
+set(CPACK_BINARY_ZIP "ON")
+set(CPACK_PACKAGE_NAME "flspo")
+set(CPACK_PACKAGE_VENDOR "Laurence Dougal Myers")
+include(CPack)
