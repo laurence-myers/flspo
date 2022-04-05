@@ -62,31 +62,43 @@ add_executable(flspo main.cpp read.cpp read.h common.h write.cpp write.h error.h
 
 ###################
 # Link dependencies
+
 target_link_libraries(flspo nowide)
 
 ################
 # Package as zip
 
-set(CPACK_RESOURCE_FILE_COPYING "${CMAKE_SOURCE_DIR}/COPYING")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
 set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README.md")
 install(
         FILES
-        ${CPACK_RESOURCE_FILE_COPYING}
+        "${CMAKE_SOURCE_DIR}/COPYING"
         ${CPACK_RESOURCE_FILE_LICENSE}
         ${CPACK_RESOURCE_FILE_README}
         DESTINATION
         .
 )
+
+include(CPackComponent)
+cpack_add_component(
+        flspo
+        DISPLAY_NAME "FL Studio Plugin Organizer"
+        REQUIRED
+)
+
 install(
         TARGETS
         flspo
         RUNTIME
         DESTINATION
         .
+        COMPONENT
+        flspo
 )
+
 set(CPACK_BINARY_NSIS "OFF")
 set(CPACK_BINARY_ZIP "ON")
 set(CPACK_PACKAGE_NAME "flspo")
 set(CPACK_PACKAGE_VENDOR "Laurence Dougal Myers")
+
 include(CPack)
