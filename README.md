@@ -6,10 +6,14 @@ Reads your installed plugins, and adds new directories in your Plugin Database, 
 
 ![FL Studio add effect dropdown](https://www.laurencedougalmyers.net/media/images/flspo_v1.0.0_ss2.png)
 
+## Installing
+
+Download the latest release from the [releases page](https://github.com/laurence-myers/flspo/releases). Extract the zip somewhere.
+
 ## How to use
 
 - In FL Studio, scan and verify all of your plugins. This will update the "Installed" plugins in your Plugin Database.
-- From a command line terminal, run FLSPO, e.g. `flspo.exe`.
+- From a command prompt, run FLSPO, e.g. `flspo.exe`.
   - On Windows, the FL Studio Plugin Database is assumed to be located at "${UserProfile}\Documents\Image-Line\FL Studio\Presets\Plugin database".
   - If your plugin database is located somewhere else, pass its directory as an argument, e.g. `flspo.exe D:\Audio\FL\PluginDB`
 
