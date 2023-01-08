@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.24.2)
 project(fl_studio_plugin_organizer
-        VERSION 1.2.0
-        DESCRIPTION "FL Studio Plugin Organizer"
-        HOMEPAGE_URL "https://github.com/laurence-myers/flspo"
-        LANGUAGES CXX
-        )
+    VERSION 1.2.0
+    DESCRIPTION "FL Studio Plugin Organizer"
+    HOMEPAGE_URL "https://github.com/laurence-myers/flspo"
+    LANGUAGES CXX
+    )
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_POLICY_DEFAULT_CMP0135 NEW) # Avoid a CMake warning
@@ -24,7 +24,7 @@ endif ()
 
 # Statically link the Windows runtime dependencies
 if (MSVC)
-    set(CMAKE_MSVC_RUNTIME_LIBRARY  "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif ()
 
 ###################
@@ -43,9 +43,9 @@ endif ()
 if (NOT (EXISTS ${CPM_DOWNLOAD_LOCATION}))
     message(STATUS "Downloading CPM.cmake to ${CPM_DOWNLOAD_LOCATION}")
     file(DOWNLOAD
-            https://github.com/cpm-cmake/CPM.cmake/releases/download/v${CPM_DOWNLOAD_VERSION}/CPM.cmake
-            ${CPM_DOWNLOAD_LOCATION}
-            )
+        https://github.com/cpm-cmake/CPM.cmake/releases/download/v${CPM_DOWNLOAD_VERSION}/CPM.cmake
+        ${CPM_DOWNLOAD_LOCATION}
+        )
 endif ()
 
 include(${CPM_DOWNLOAD_LOCATION})
@@ -54,11 +54,11 @@ include(${CPM_DOWNLOAD_LOCATION})
 # Dependencies
 
 CPMAddPackage(
-        NAME nowide          # The unique name of the dependency (should be the exported target's name)
-        VERSION 11.1.4       # The minimum version of the dependency (optional, defaults to 0)
-        #    OPTIONS       # Configuration options passed to the dependency (optional)
-        #    DOWNLOAD_ONLY # If set, the project is downloaded, but not configured (optional)
-        URL "https://github.com/boostorg/nowide/releases/download/v11.1.4/nowide_standalone_v11.1.4.tar.gz"         # Origin parameters forwarded to FetchContent_Declare
+    NAME nowide          # The unique name of the dependency (should be the exported target's name)
+    VERSION 11.1.4       # The minimum version of the dependency (optional, defaults to 0)
+    #    OPTIONS       # Configuration options passed to the dependency (optional)
+    #    DOWNLOAD_ONLY # If set, the project is downloaded, but not configured (optional)
+    URL "https://github.com/boostorg/nowide/releases/download/v11.1.4/nowide_standalone_v11.1.4.tar.gz"         # Origin parameters forwarded to FetchContent_Declare
 )
 
 ##############
@@ -80,31 +80,31 @@ target_link_libraries(flspo nowide)
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
 set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README.md")
 install(
-        FILES
-        "${CMAKE_SOURCE_DIR}/COPYING"
-        ${CPACK_RESOURCE_FILE_LICENSE}
-        ${CPACK_RESOURCE_FILE_README}
-        DESTINATION
-        .
-        COMPONENT
-        flspo
+    FILES
+    "${CMAKE_SOURCE_DIR}/COPYING"
+    ${CPACK_RESOURCE_FILE_LICENSE}
+    ${CPACK_RESOURCE_FILE_README}
+    DESTINATION
+    .
+    COMPONENT
+    flspo
 )
 
 include(CPackComponent)
 cpack_add_component(
-        flspo
-        DISPLAY_NAME "FL Studio Plugin Organizer"
-        REQUIRED
+    flspo
+    DISPLAY_NAME "FL Studio Plugin Organizer"
+    REQUIRED
 )
 
 install(
-        TARGETS
-        flspo
-        RUNTIME
-        DESTINATION
-        .
-        COMPONENT
-        flspo
+    TARGETS
+    flspo
+    RUNTIME
+    DESTINATION
+    .
+    COMPONENT
+    flspo
 )
 
 set(CPACK_BINARY_NSIS "OFF")
