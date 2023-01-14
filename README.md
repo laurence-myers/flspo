@@ -19,7 +19,8 @@ Download the latest release from the [releases page](https://github.com/laurence
 
 In FL Studio, when you go to add a new Generator or Effect, the dropdown menu will have a new folder named "By Vendor".
 
-If you install a new plugin, add it to FL Studio by doing a "quick scan", then re-run FLSPO. 
+If you install a new plugin, add it to FL Studio by doing a full plugin scan ("Add" -> "Manage Plugins", click "Find
+installed plugins"), then re-run FLSPO.
 
 _(This only makes sense when you use the "Tree" or "Categories" views. The "Simple" view will not look any different.)_
 
